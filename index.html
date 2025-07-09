@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skintific Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <h2>Skintific Store</h2>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#produk">Produk</a></li>
+        <li><a href="#tentang">Tentang Kami</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <h1>Rasakan Keajaiban Kulit Cerah dan Sehat dalam Sekejap</h1>
+    <p>Temukan rahasia kulit glowing dengan produk Skintific terbaik. Pesan sekarang untuk hasil maksimal!</p>
+    <a href="#produk" class="btn-hero">🛒 Pesan Sekarang</a>
+  </section>
+
+  <h1 id="produk">Menu Produk Pilihan Kami</h1>
+  <div class="product-container">
+
+    <div class="product-card">
+      <img src="img/ceramide.jpg" alt="5X Ceramide Moisture Gel" />
+      <h3>5X Ceramide Moisture Gel</h3>
+      <p class="price">Rp 89.000</p>
+      <button class="btn-cart" onclick="addToCart('5X Ceramide Moisture Gel', 89000)">Beli</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/mugwort.jpg" alt="Mugwort Anti Pores Mask" />
+      <h3>Mugwort Anti Pores Mask</h3>
+      <p class="price">Rp 99.000</p>
+      <button class="btn-cart" onclick="addToCart('Mugwort Anti Pores Mask', 99000)">Beli</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/aha.jpg" alt="Gentle AHA Exfoliating Toner" />
+      <h3>Gentle AHA Exfoliating Toner</h3>
+      <p class="price">Rp 109.000</p>
+      <button class="btn-cart" onclick="addToCart('Gentle AHA Exfoliating Toner', 109000)">Beli</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/sunscreen.jpg" alt="Sunscreen SPF 50 PA++++" />
+      <h3>Sunscreen SPF 50 PA++++</h3>
+      <p class="price">Rp 95.000</p>
+      <button class="btn-cart" onclick="addToCart('Sunscreen SPF 50 PA++++', 95000)">Beli</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/niacinamide-bright.jpg" alt="Niacinamide Brightening Serum" />
+      <h3>Niacinamide Brightening Serum</h3>
+      <p class="price">Rp 98.000</p>
+      <button class="btn-cart" onclick="addToCart('Niacinamide Brightening Serum', 98000)">Beli</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/niacinamide-body.jpg" alt="MSH Niacinamide Body Serum" />
+      <h3>MSH Niacinamide Body Serum</h3>
+      <p class="price">Rp 99.000</p>
+      <button class="btn-cart" onclick="addToCart('MSH Niacinamide Body Serum', 99000)">Beli</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/niacinamide-big.jpg" alt="MSH Niacinamide 80g" />
+      <h3>MSH Niacinamide 80g</h3>
+      <p class="price">Rp 99.000</p>
+      <button class="btn-cart" onclick="addToCart('MSH Niacinamide 80g', 99000)">Beli</button>
+    </div>
+
+  </div>
+
+  <div class="cart-section">
+    <h2>🛒 Keranjang Belanja</h2>
+    <ul id="cart-list"></ul>
+    <p id="cart-total">Total: Rp 0</p>
+    <button id="checkout-btn" onclick="checkoutViaWA()">Checkout via WhatsApp</button>
+  </div>
+
+  <footer>
+    <section id="tentang">
+      <h2>Tentang Kami</h2>
+      <p>Kami adalah toko resmi yang menjual produk Skintific original dan berkualitas.</p>
+    </section>
+
+    <section id="kontak">
+      <h2>Kontak</h2>
+      <p>WhatsApp: 0812-4685-4850<br>Email: skintificstore@email.com</p>
+    </section>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function addToCart(name, price) {
+      const existing = cart.find(item => item.name === name);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ name, price, qty: 1 });
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById("cart-list");
+      const total = document.getElementById("cart-total");
+      cartList.innerHTML = "";
+      let totalPrice = 0;
+      cart.forEach(item => {
+        const itemTotal = item.qty * item.price;
+        totalPrice += itemTotal;
+        cartList.innerHTML += `<li>${item.name} (${item.qty}x) - Rp ${itemTotal.toLocaleString()}</li>`;
+      });
+      total.textContent = "Total: Rp " + totalPrice.toLocaleString();
+      document.getElementById("checkout-btn").style.display = cart.length ? "inline-block" : "none";
+    }
+
+    function checkoutViaWA() {
+      let message = "Halo, saya ingin memesan produk berikut:%0A%0A";
+      cart.forEach(item => {
+        message += `- ${item.name} (${item.qty}x)%0A`;
+      });
+      let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      message += `%0ATotal: Rp ${total.toLocaleString()}`;
+      window.open("https://wa.me/6281246854850?text=" + message, "_blank");
+    }
+  </script>
+
+</body>
+</html>
